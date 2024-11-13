@@ -1,0 +1,641 @@
+﻿
+@{
+    ViewBag.Title = "AprobacionPago";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .col-xs-es,
+    .col-sm-es,
+    .col-md-es,
+    .col-lg-es {
+        min-height: 1px;
+        position: relative;
+    }
+
+    .col-xs-es {
+        float: left;
+        width: 20%;
+    }
+
+    @@media (min-width: 768px) {
+
+        .col-sm-es {
+            float: left;
+            width: 20%;
+        }
+    }
+
+    @@media (min-width: 992px) {
+
+        .col-md-es {
+            float: left;
+            width: 20%;
+        }
+    }
+
+    @@media (min-width: 1200px) {
+
+        .col-lg-es {
+            float: left;
+            width: 20%;
+        }
+    }
+</style>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Subheader-->
+    <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Info-->
+            <div class="d-flex align-items-center flex-wrap mr-1">
+                <!--begin::Page Heading-->
+                <div class="d-flex align-items-baseline mr-5">
+                    <!--begin::Page Title-->
+                    <h5 class="text-dark font-weight-bold my-2 mr-5">Pagos proyectados</h5>
+                    <!--end::Page Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Content("~/AprobacionPago")" class="text-muted">Inicio</a>
+                        </li>
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page Heading-->
+
+            </div>
+            <!--end::Info-->
+        </div>
+    </div>
+    <!--end::Subheader-->
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container-fluid m-1">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--begin::Card-->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="control-label mb-5">Datos de pago</h5>
+                            <div class="form-group row align-items-center">
+
+                                <div class="col-md-3 mt-6">
+                                    <label class="control-label">Cuenta a debitar <font color="red">*</font></label>
+                                    <select class="form-control" id="cuentaBanco" style="width:100%">
+                                        <option></option>
+                                        @{
+                                            if (ViewBag.CuentasBancarias != null)
+                                            {
+                                                foreach (var item in ViewBag.CuentasBancarias)
+                                                {
+                                                    <option value="@item.CUENTA_BANCO" data-moneda="@item.MONEDA">@item.CUENTA_BANCO - @item.NOMBRE</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-2 mt-6">
+                                    <label for="FiltroProveedor">Moneda <font color="red">*</font></label>
+                                    <select disabled id="filtromoneda" style="width:100%" class="form-control filtro">
+                                        <option></option>
+                                        @*<option value="0">Todos</option>*@
+                                        @*LLENAR COMBO DE MONEDAS*@
+                                        <option value="CRC">CRC - Colones</option>
+                                        <option value="USD">USD - Dólares</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mt-6">
+                                    <form id="RangoFecha" class="mt-1 pt-3">
+                                        <label for="">Rango de fechas</label>
+                                        <div class="input-daterange input-group" id="kt_datepicker_5">
+                                            <input type="text" class="form-control filtro fecha" id="FechaInicio" name="start" autocomplete="off" value="@(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddMonths(-12).ToString("dd/MM/yyyy"))" />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="la la-ellipsis-h"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control filtro fecha" id="FechaFinal" name="end" autocomplete="off" value="@(DateTime.Now.ToString("dd/MM/yyyy"))" />
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-2 mt-6">
+                                    <label for="FechaRige">Fecha vence límite</label>
+                                    <div class="input-group date">
+                                        <input name="FechaProyectada" id="FechaLimite" style="width:100%" class="form-control fecha" value="@(DateTime.Now.AddDays(7).ToString("dd/MM/yyyy"))" />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row align-items-center">
+                                <div class="col-md-3 mt-6">
+                                    <label for="FiltroProveedor">Proveedor</label>
+                                    <select id="FiltroProveedor" class="form-control filtro">
+                                        <option></option>
+                                        <option value="0" selected>Todos</option>
+                                        @{
+                                            if (ViewBag.Proveedores != null)
+                                            {
+                                                foreach (var item in ViewBag.Proveedores)
+                                                {
+                                                    <option value="@item.PROVEEDOR">@item.PROVEEDOR - @item.NOMBRE</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                @*<div class="col-md-1">
+                                        <label for="FiltroProveedor">Con orden compra</label>
+                                        <select id="filtrooc" style="width:100%" class="form-control">
+                                            <option></option>
+                                            <option selected value="0">Todos</option>
+                                            <option value="S">Sí</option>
+                                            <option value="N">No</option>
+                                        </select>
+                                    </div>*@
+                                <div class="col-md-2 mt-6">
+                                    <label for="FiltroTEF">TEF</label>
+                                    <select id="FiltroTEF" class="form-control filtro">
+                                        <option></option>
+                                        <option value="0">Todas</option>
+                                        <option selected value="X">Sin TEF</option>
+                                        @{
+                                            if (ViewBag.Transferencias != null)
+                                            {
+                                                foreach (var item in ViewBag.Transferencias)
+                                                {
+                                                    <option value="@item.TRANSFERENCIA">@item.TRANSFERENCIA</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-2 mt-6">
+                                    <label for="FiltroProveedor">Tipo</label>
+                                    <select id="filtroTipo" style="width:100%" class="form-control">
+                                        <option></option>
+                                        <option selected value="0">Todos</option>
+                                        <option value="FAC">FAC</option>
+                                        <option value="O/D">O/D</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2 mt-5">
+                                    <div class="font-weight-bold mb-2 text-white">.</div>
+                                    <button type="button" id="MarcarTodas" class="btn btn-success">Aplicar filtros</button>
+                                </div>
+                            </div>
+                            <div class="separator"></div>
+                        </div>
+
+                        <!--begin::Body-->
+                        <div class="card-body d-flex flex-column py-4">
+
+                            <!--Begin::Row-->
+                            <div class="dashboard-tabs nav nav-pills nav-danger row row-paddingless m-0 p-0 flex-column flex-sm-row">
+                                <div class="nav-item  col-sm flex-grow-1 flex-shrink-0 mr-3 mb-lg-0">
+                                    <!--begin::Stats Widget 25-->
+                                    <div class="card card-custom bg-light-primary card-stretch gutter-b">
+                                        <!--begin::Body-->
+                                        <div class="card-body">
+                                            <span class="svg-icon svg-icon-2x svg-icon-primary">
+                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Mail-opened.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <path d="M12,21 C7.581722,21 4,17.418278 4,13 C4,8.581722 7.581722,5 12,5 C16.418278,5 20,8.581722 20,13 C20,17.418278 16.418278,21 12,21 Z" fill="#000000" opacity="0.3" />
+                                                        <path d="M13,5.06189375 C12.6724058,5.02104333 12.3386603,5 12,5 C11.6613397,5 11.3275942,5.02104333 11,5.06189375 L11,4 L10,4 C9.44771525,4 9,3.55228475 9,3 C9,2.44771525 9.44771525,2 10,2 L14,2 C14.5522847,2 15,2.44771525 15,3 C15,3.55228475 14.5522847,4 14,4 L13,4 L13,5.06189375 Z" fill="#000000" />
+                                                        <path d="M16.7099142,6.53272645 L17.5355339,5.70710678 C17.9260582,5.31658249 18.5592232,5.31658249 18.9497475,5.70710678 C19.3402718,6.09763107 19.3402718,6.73079605 18.9497475,7.12132034 L18.1671361,7.90393167 C17.7407802,7.38854954 17.251061,6.92750259 16.7099142,6.53272645 Z" fill="#000000" />
+                                                        <path d="M11.9630156,7.5 L12.0369844,7.5 C12.2982526,7.5 12.5154733,7.70115317 12.5355117,7.96165175 L12.9585886,13.4616518 C12.9797677,13.7369807 12.7737386,13.9773481 12.4984096,13.9985272 C12.4856504,13.9995087 12.4728582,14 12.4600614,14 L11.5399386,14 C11.2637963,14 11.0399386,13.7761424 11.0399386,13.5 C11.0399386,13.4872031 11.0404299,13.4744109 11.0414114,13.4616518 L11.4644883,7.96165175 C11.4845267,7.70115317 11.7017474,7.5 11.9630156,7.5 Z" fill="#000000" />
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+
+                                            <span class="font-weight-bold font-size-sm text-primary h5">Vencidos</span>
+                                            <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 mt-6 d-block" id="montoVencidasCRC">₡0.00</span>
+                                            <span class="font-weight-bold text-muted font-size-sm" id="textVencidasCRC">Total de facturas a pagar en colones</span>
+                                        </div>
+                                        <!--end::Body-->
+                                    </div>
+                                    <!--end::Stats Widget 25-->
+                                </div>
+                                <div class="nav-item  col-sm flex-grow-1 flex-shrink-0 mr-3 mb-lg-0">
+                                    <!--begin::Stats Widget 25-->
+                                    <div class="card card-custom bg-light-primary card-stretch gutter-b">
+                                        <!--begin::Body-->
+                                        <div class="card-body">
+                                            <span class="svg-icon svg-icon-2x svg-icon-primary">
+                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Mail-opened.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <path d="M12,21 C7.581722,21 4,17.418278 4,13 C4,8.581722 7.581722,5 12,5 C16.418278,5 20,8.581722 20,13 C20,17.418278 16.418278,21 12,21 Z" fill="#000000" opacity="0.3" />
+                                                        <path d="M13,5.06189375 C12.6724058,5.02104333 12.3386603,5 12,5 C11.6613397,5 11.3275942,5.02104333 11,5.06189375 L11,4 L10,4 C9.44771525,4 9,3.55228475 9,3 C9,2.44771525 9.44771525,2 10,2 L14,2 C14.5522847,2 15,2.44771525 15,3 C15,3.55228475 14.5522847,4 14,4 L13,4 L13,5.06189375 Z" fill="#000000" />
+                                                        <path d="M16.7099142,6.53272645 L17.5355339,5.70710678 C17.9260582,5.31658249 18.5592232,5.31658249 18.9497475,5.70710678 C19.3402718,6.09763107 19.3402718,6.73079605 18.9497475,7.12132034 L18.1671361,7.90393167 C17.7407802,7.38854954 17.251061,6.92750259 16.7099142,6.53272645 Z" fill="#000000" />
+                                                        <path d="M11.9630156,7.5 L12.0369844,7.5 C12.2982526,7.5 12.5154733,7.70115317 12.5355117,7.96165175 L12.9585886,13.4616518 C12.9797677,13.7369807 12.7737386,13.9773481 12.4984096,13.9985272 C12.4856504,13.9995087 12.4728582,14 12.4600614,14 L11.5399386,14 C11.2637963,14 11.0399386,13.7761424 11.0399386,13.5 C11.0399386,13.4872031 11.0404299,13.4744109 11.0414114,13.4616518 L11.4644883,7.96165175 C11.4845267,7.70115317 11.7017474,7.5 11.9630156,7.5 Z" fill="#000000" />
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+
+                                            <span class="font-weight-bold font-size-sm text-primary h5">Vencidos</span>
+                                            <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 mt-6 d-block" id="montoVencidasUSD">$0.00</span>
+                                            <span class="font-weight-bold text-muted font-size-sm" id="textVencidasUSD">Total de facturas a pagar en dólares</span>
+                                        </div>
+                                        <!--end::Body-->
+                                    </div>
+                                    <!--end::Stats Widget 25-->
+                                </div>
+                                <div class="nav-item col-sm flex-grow-1 flex-shrink-0 mr-3 mb-lg-0">
+                                    <!--begin::Stats Widget 26-->
+                                    <div class="card card-custom bg-light-warning card-stretch gutter-b">
+                                        <!--begin::ody-->
+                                        <div class="card-body">
+                                            <span class="svg-icon svg-icon-2x svg-icon-warning">
+                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Group.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <path d="M10.9630156,7.5 L11.0475062,7.5 C11.3043819,7.5 11.5194647,7.69464724 11.5450248,7.95024814 L12,12.5 L15.2480695,14.3560397 C15.403857,14.4450611 15.5,14.6107328 15.5,14.7901613 L15.5,15 C15.5,15.2109164 15.3290185,15.3818979 15.1181021,15.3818979 C15.0841582,15.3818979 15.0503659,15.3773725 15.0176181,15.3684413 L10.3986612,14.1087258 C10.1672824,14.0456225 10.0132986,13.8271186 10.0316926,13.5879956 L10.4644883,7.96165175 C10.4845267,7.70115317 10.7017474,7.5 10.9630156,7.5 Z" fill="#000000" />
+                                                        <path d="M7.38979581,2.8349582 C8.65216735,2.29743306 10.0413491,2 11.5,2 C17.2989899,2 22,6.70101013 22,12.5 C22,18.2989899 17.2989899,23 11.5,23 C5.70101013,23 1,18.2989899 1,12.5 C1,11.5151324 1.13559454,10.5619345 1.38913364,9.65805651 L3.31481075,10.1982117 C3.10672013,10.940064 3,11.7119264 3,12.5 C3,17.1944204 6.80557963,21 11.5,21 C16.1944204,21 20,17.1944204 20,12.5 C20,7.80557963 16.1944204,4 11.5,4 C10.54876,4 9.62236069,4.15592757 8.74872191,4.45446326 L9.93948308,5.87355717 C10.0088058,5.95617272 10.0495583,6.05898805 10.05566,6.16666224 C10.0712834,6.4423623 9.86044965,6.67852665 9.5847496,6.69415008 L4.71777931,6.96995273 C4.66931162,6.97269931 4.62070229,6.96837279 4.57348157,6.95710938 C4.30487471,6.89303938 4.13906482,6.62335149 4.20313482,6.35474463 L5.33163823,1.62361064 C5.35654118,1.51920756 5.41437908,1.4255891 5.49660017,1.35659741 C5.7081375,1.17909652 6.0235153,1.2066885 6.2010162,1.41822583 L7.38979581,2.8349582 Z" fill="#000000" opacity="0.3" />
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+
+                                            <span class="font-weight-bold font-size-sm text-warning h5">Sin vencer</span>
+                                            <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 mt-6 d-block" id="montoPorVencerCRC">₡0.00</span>
+                                            <span class="font-weight-bold text-muted font-size-sm" id="textPorVencerCRC">Por vencer colones</span>
+                                        </div>
+                                        <!--end::Body-->
+                                    </div>
+                                    <!--end::Stats Widget 26-->
+                                </div>
+                                <div class="nav-item col-sm flex-grow-1 flex-shrink-0 mr-3 mb-lg-0">
+                                    <!--begin::Stats Widget 27-->
+                                    <div class="card card-custom bg-light-warning card-stretch gutter-b">
+                                        <!--begin::Body-->
+                                        <div class="card-body">
+                                            <span class="svg-icon svg-icon-2x svg-icon-warning">
+                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Media/Equalizer.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <path d="M10.9630156,7.5 L11.0475062,7.5 C11.3043819,7.5 11.5194647,7.69464724 11.5450248,7.95024814 L12,12.5 L15.2480695,14.3560397 C15.403857,14.4450611 15.5,14.6107328 15.5,14.7901613 L15.5,15 C15.5,15.2109164 15.3290185,15.3818979 15.1181021,15.3818979 C15.0841582,15.3818979 15.0503659,15.3773725 15.0176181,15.3684413 L10.3986612,14.1087258 C10.1672824,14.0456225 10.0132986,13.8271186 10.0316926,13.5879956 L10.4644883,7.96165175 C10.4845267,7.70115317 10.7017474,7.5 10.9630156,7.5 Z" fill="#000000" />
+                                                        <path d="M7.38979581,2.8349582 C8.65216735,2.29743306 10.0413491,2 11.5,2 C17.2989899,2 22,6.70101013 22,12.5 C22,18.2989899 17.2989899,23 11.5,23 C5.70101013,23 1,18.2989899 1,12.5 C1,11.5151324 1.13559454,10.5619345 1.38913364,9.65805651 L3.31481075,10.1982117 C3.10672013,10.940064 3,11.7119264 3,12.5 C3,17.1944204 6.80557963,21 11.5,21 C16.1944204,21 20,17.1944204 20,12.5 C20,7.80557963 16.1944204,4 11.5,4 C10.54876,4 9.62236069,4.15592757 8.74872191,4.45446326 L9.93948308,5.87355717 C10.0088058,5.95617272 10.0495583,6.05898805 10.05566,6.16666224 C10.0712834,6.4423623 9.86044965,6.67852665 9.5847496,6.69415008 L4.71777931,6.96995273 C4.66931162,6.97269931 4.62070229,6.96837279 4.57348157,6.95710938 C4.30487471,6.89303938 4.13906482,6.62335149 4.20313482,6.35474463 L5.33163823,1.62361064 C5.35654118,1.51920756 5.41437908,1.4255891 5.49660017,1.35659741 C5.7081375,1.17909652 6.0235153,1.2066885 6.2010162,1.41822583 L7.38979581,2.8349582 Z" fill="#000000" opacity="0.3" />
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+
+                                            <span class="font-weight-bold font-size-sm text-warning h5">Sin vencer</span>
+                                            <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 mt-6 d-block" id="montoPorVencerUSD">$0.00</span>
+                                            <span class="font-weight-bold text-muted font-size-sm" id="textPorVencerUSD">Por vencer dólares</span>
+                                        </div>
+                                        <!--end::Body-->
+                                    </div>
+                                    <!--end::Stats Widget 27-->
+                                </div>
+                                <div class="nav-item  col-sm flex-grow-1 flex-shrink-0 mr-3 mb-lg-0">
+                                    <!--begin::Stats Widget 28-->
+                                    <div class="card card-custom bg-light-success card-stretch gutter-b">
+                                        <!--begin::Body-->
+                                        <div class="card-body">
+                                            <span class="svg-icon svg-icon-2x svg-icon-success">
+                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Group-chat.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <rect fill="#000000" opacity="0.3" x="7" y="4" width="10" height="4" />
+                                                        <path d="M7,2 L17,2 C18.1045695,2 19,2.8954305 19,4 L19,20 C19,21.1045695 18.1045695,22 17,22 L7,22 C5.8954305,22 5,21.1045695 5,20 L5,4 C5,2.8954305 5.8954305,2 7,2 Z M8,12 C8.55228475,12 9,11.5522847 9,11 C9,10.4477153 8.55228475,10 8,10 C7.44771525,10 7,10.4477153 7,11 C7,11.5522847 7.44771525,12 8,12 Z M8,16 C8.55228475,16 9,15.5522847 9,15 C9,14.4477153 8.55228475,14 8,14 C7.44771525,14 7,14.4477153 7,15 C7,15.5522847 7.44771525,16 8,16 Z M12,12 C12.5522847,12 13,11.5522847 13,11 C13,10.4477153 12.5522847,10 12,10 C11.4477153,10 11,10.4477153 11,11 C11,11.5522847 11.4477153,12 12,12 Z M12,16 C12.5522847,16 13,15.5522847 13,15 C13,14.4477153 12.5522847,14 12,14 C11.4477153,14 11,14.4477153 11,15 C11,15.5522847 11.4477153,16 12,16 Z M16,12 C16.5522847,12 17,11.5522847 17,11 C17,10.4477153 16.5522847,10 16,10 C15.4477153,10 15,10.4477153 15,11 C15,11.5522847 15.4477153,12 16,12 Z M16,16 C16.5522847,16 17,15.5522847 17,15 C17,14.4477153 16.5522847,14 16,14 C15.4477153,14 15,14.4477153 15,15 C15,15.5522847 15.4477153,16 16,16 Z M16,20 C16.5522847,20 17,19.5522847 17,19 C17,18.4477153 16.5522847,18 16,18 C15.4477153,18 15,18.4477153 15,19 C15,19.5522847 15.4477153,20 16,20 Z M8,18 C7.44771525,18 7,18.4477153 7,19 C7,19.5522847 7.44771525,20 8,20 L12,20 C12.5522847,20 13,19.5522847 13,19 C13,18.4477153 12.5522847,18 12,18 L8,18 Z M7,4 L7,8 L17,8 L17,4 L7,4 Z" fill="#000000" />
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+
+                                            <span class="font-weight-bold font-size-sm text-success h5" id="textBancoCRC"></span>
+                                            <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 mt-6 d-block" id="totalFacturaColones">₡0.00</span>
+                                            <span class="font-weight-bold text-muted font-size-sm">Total de facturas a pagar en colones</span>
+                                        </div>
+                                        <!--end::Body-->
+                                    </div>
+                                    <!--end::Stat: Widget 28-->
+                                </div>
+                                <div class="nav-item  col-sm flex-grow-1 flex-shrink-0 mr-3 mb-lg-0">
+                                    <!--begin::Stats Widget 28-->
+                                    <div class="card card-custom bg-light-success card-stretch gutter-b">
+                                        <!--begin::Body-->
+                                        <div class="card-body">
+                                            <span class="svg-icon svg-icon-2x svg-icon-success">
+                                                <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Group-chat.svg-->
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <rect fill="#000000" opacity="0.3" x="7" y="4" width="10" height="4" />
+                                                        <path d="M7,2 L17,2 C18.1045695,2 19,2.8954305 19,4 L19,20 C19,21.1045695 18.1045695,22 17,22 L7,22 C5.8954305,22 5,21.1045695 5,20 L5,4 C5,2.8954305 5.8954305,2 7,2 Z M8,12 C8.55228475,12 9,11.5522847 9,11 C9,10.4477153 8.55228475,10 8,10 C7.44771525,10 7,10.4477153 7,11 C7,11.5522847 7.44771525,12 8,12 Z M8,16 C8.55228475,16 9,15.5522847 9,15 C9,14.4477153 8.55228475,14 8,14 C7.44771525,14 7,14.4477153 7,15 C7,15.5522847 7.44771525,16 8,16 Z M12,12 C12.5522847,12 13,11.5522847 13,11 C13,10.4477153 12.5522847,10 12,10 C11.4477153,10 11,10.4477153 11,11 C11,11.5522847 11.4477153,12 12,12 Z M12,16 C12.5522847,16 13,15.5522847 13,15 C13,14.4477153 12.5522847,14 12,14 C11.4477153,14 11,14.4477153 11,15 C11,15.5522847 11.4477153,16 12,16 Z M16,12 C16.5522847,12 17,11.5522847 17,11 C17,10.4477153 16.5522847,10 16,10 C15.4477153,10 15,10.4477153 15,11 C15,11.5522847 15.4477153,12 16,12 Z M16,16 C16.5522847,16 17,15.5522847 17,15 C17,14.4477153 16.5522847,14 16,14 C15.4477153,14 15,14.4477153 15,15 C15,15.5522847 15.4477153,16 16,16 Z M16,20 C16.5522847,20 17,19.5522847 17,19 C17,18.4477153 16.5522847,18 16,18 C15.4477153,18 15,18.4477153 15,19 C15,19.5522847 15.4477153,20 16,20 Z M8,18 C7.44771525,18 7,18.4477153 7,19 C7,19.5522847 7.44771525,20 8,20 L12,20 C12.5522847,20 13,19.5522847 13,19 C13,18.4477153 12.5522847,18 12,18 L8,18 Z M7,4 L7,8 L17,8 L17,4 L7,4 Z" fill="#000000" />
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+
+                                            <span class="font-weight-bold font-size-sm text-success h5" id="textBancoUSD"></span>
+                                            <span class="card-title font-weight-bolder text-dark-75 font-size-h2 mb-0 mt-6 d-block" id="totalFacturaDolares">$0.00</span>
+                                            <span class="font-weight-bold text-muted font-size-sm">Total de facturas a pagar en dólares</span>
+                                        </div>
+                                        <!--end::Body-->
+                                    </div>
+                                    <!--end::Stat: Widget 28-->
+                                </div>
+                            </div>
+                            <!--End::Row-->
+                        </div>
+                        <!--end::Body-->
+
+                        <div class="card-body">
+
+                            <h5 class="control-label mb-2">Pagos </h5>
+                            <!--begin::Search Form-->
+                            <div class="mb-7">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2 pt-5 mt-3 offset-md-10">
+                                        <div class="input-icon">
+                                            <input type="text" class="form-control" placeholder="Buscar..." id="kt_datatable_search_query_Aprobacion" autocomplete="off" />
+                                            <span>
+                                                <i class="flaticon2-search-1 text-muted"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Search Form-->
+                            <!--begin: Datatable-->
+                            <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_aprobacion"></div>
+                            <!--end: Datatable-->
+                            @*<div class="card-body p-0 mt-5 d-none">
+                                    <div class="row justify-content-center bg-gray-100 py-8 px-8 py-md-10 px-md-0">
+                                        <div class="col-md-9">
+                                            <div class="d-flex justify-content-between flex-column flex-md-row font-size-lg">
+                                                <div class="d-flex flex-column text-md-right">
+                                                    <span class="font-size-lg font-weight-bolder mb-1">Total pago</span>
+                                                    <span class="font-size-h2 font-weight-boldest text-success mb-1" id="totalFacturaColones2">₡0</span>
+                                                    <span>Total del pago en colones</span>
+                                                </div>
+                                                <div class="d-flex flex-column text-md-right">
+                                                    <span class="font-size-lg font-weight-bolder mb-1">Total pago</span>
+                                                    <span class="font-size-h2 font-weight-boldest text-success mb-1" id="totalFacturaDolares2">$0</span>
+                                                    <span>Total del pago en dólares</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                    <!--end::Card-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Entry-->
+</div>
+
+<div class="modal fade" id="ModalPDF" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalComentario">PDF de Factura </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="pdf_preview" class="m--hidden" style="pointer-events:auto;"></div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalXMLFAC" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalComentario">PDF de Factura </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <pre lang='xml'>
+                <div id="xml_preview" class="m--hidden" style=" font-size:18px;pointer-events:auto; width:90%; height:100%; -webkit-hyphens: auto;   -moz-hyphens: auto;    -ms-hyphens: auto;hyphens: auto;">
+                   
+                    </div>
+                </pre>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal-->
+<div class="modal fade" id="modalCambiarTEF" tabindex="-1" role="dialog" aria-labelledby="modalCambiarTEFLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="modalCambiarTEFLabel">Cambiar documento a otra transferencia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="card-body m-0">
+                    <form id="frm-cambiar-tef">
+                        <div class="form-group col-md-12">
+                            <label for="CambiarTEF">Cambiar a esta transferencia:</label>
+                            <select name="CambiarTEF" style="width: 100%" id="cambiarTEF" class="form-control">
+                                <option></option>
+                                @{
+                                    if (ViewBag.Transferencias != null)
+                                    {
+                                        foreach (var item in ViewBag.Transferencias)
+                                        {
+                                            <option value="@item.TRANSFERENCIA">@item.TRANSFERENCIA</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12 d-none">
+                            <label for="CambiarTEF">Transferencia vieja</label>
+                            <select name="CambiarTEF" style="width: 100%" id="cambiarTEFAnterior" disabled class="form-control">
+                                <option></option>
+                                @{
+                                    if (ViewBag.Transferencias != null)
+                                    {
+                                        foreach (var item in ViewBag.Transferencias)
+                                        {
+                                            <option value="@item.TRANSFERENCIA">@item.TRANSFERENCIA</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12 d-none">
+                            <label for="CambiarTEF">Documento</label>
+                            <input type="text" class="form-control" name="Descripcion" disabled id="numDocumento" />
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cambiar-tef" onclick="CambiarTEF()" type="button" class="btn btn-primary font-weight-bold">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal-->
+
+<div class="modal fade" id="ModalGenerarTef" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalComentario">Crear transferencia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-6 form-group">
+                    <label class="control-label">Transferencia</label><br />
+                    <input type="text" class="form-control transferencia" id="transferencia" style="width:100%" autocomplete="off" value="@DateTime.Now.ToString("ddMMyyHMMss")">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label class="control-label">Moneda</label><br />
+                    <input disabled class="form-control" id="tipo" name="tipo" placeholder="Debe seleccionar una cuenta" style="width:100%" value="" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label class="control-label">Fecha</label><br />
+                    <input disabled type="text" class="form-control fecha" id="Fecha" name="fecha" autocomplete="off" value="@(DateTime.Now.ToString("dd/MM/yyyy"))" style="width:100%" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="FechaRige">Fecha proyectada pago</label>
+                    <div class="input-group date">
+                        <input name="FechaProyectada" id="FechaProyectada" class="form-control fecha" value="@(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddDays(-1).ToString("dd/MM/yyyy"))" style="width:100%" />
+
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label class="control-label">Aprobador financiero</label>
+                    <select class="form-control" id="aprobadorfinanciero" style="width:100%">
+                        <option></option>
+                        @{
+                            if (ViewBag.AprobadoresFinanciero != null)
+                            {
+                                foreach (var item in ViewBag.AprobadoresFinanciero)
+                                {
+                                    <option value="@item.USUARIO" @(ViewBag.FinancieroDefault == item.USUARIO ? "selected" : "")>@item.USUARIO - @item.NOMBRE</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label class="control-label">Aprobador gerencia</label>
+                    <select class="form-control" id="aprobadorgerencia" style="width:100%">
+                        <option></option>
+                        @{
+                            if (ViewBag.AprobadoresGerencia != null)
+                            {
+                                foreach (var item in ViewBag.AprobadoresGerencia)
+                                {
+                                    <option value="@item.USUARIO" @(ViewBag.GerenciaDefault == item.USUARIO ? "selected" : "")>@item.USUARIO - @item.NOMBRE</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6 form-group d-none">
+                    <label class="control-label">Usuario TEF</label>
+                    <select class="form-control" id="usuariotef" style="width:100%">
+                        <option></option>
+                        @{
+                            if (ViewBag.UsuariosTEF != null)
+                            {
+                                foreach (var item in ViewBag.UsuariosTEF)
+                                {
+                                    if (item.USUARIO.ToUpper() == Session["Usuario"].ToString().ToUpper())
+                                    {
+                                        <option value="@item.USUARIO" selected>@item.DESCRIPCION</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.USUARIO">@item.DESCRIPCION</option>
+                                    }
+
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6 form-group ">
+
+                    <label for="btns">Seleccione una opción</label>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="unatef" onclick="seleccion('1')">
+                            Una TEF
+                        </button>
+                        <button class="btn btn-light-primary" id="multitef" onclick="seleccion('2');">
+                            TEF por proveedor
+                        </button>
+                    </div>
+                    @*<span class="form-text text-muted">La opción Una Tef generará una única TEF para todos los proveedores, la opción TEF por proveedor generará una TEF por cada proveedor</span>*@
+
+                </div>
+                <div class="col-md-12 ">
+
+                    <span class="form-text text-muted">La opción Una Tef generará una única TEF para todos los proveedores, la opción TEF por proveedor generará una TEF por cada proveedor</span>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary font-weight-bold" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="deleteButton" onclick="validarSiExisteLaTEF()" class="btn btn-success font-weight-bold" value="Default">Crear transferencia</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul class="sticky-toolbar nav flex-column pl-2 pr-2 pt-3 pb-3 mt-4">
+    <!--begin::Item-->
+    <li class="nav-item mb-2" data-toggle="tooltip" title="" data-placement="right" data-original-title="Desplazar a la derecha">
+        <a onclick="scrollToTableRight()" class="btn btn-sm btn-icon btn-bg-light btn-text-primary btn-hover-primary">
+            <i class="las la-angle-right icon-xl"></i>
+        </a>
+    </li>
+    <li class="nav-item mb-2" data-toggle="tooltip" title="" data-placement="right" data-original-title="Desplazar a la izquierda">
+        <a onclick="scrollToTableLeft()" class="btn btn-sm btn-icon btn-bg-light btn-text-primary btn-hover-primary">
+            <i class="las la-angle-left icon-xl"></i>
+        </a>
+    </li>
+    @if (Session["PAGOS_PROYECTADOS"].ToString() == "1")
+    {
+        <li class="nav-item mb-2 d-none" data-toggle="tooltip" title="" data-placement="right" onclick="verModalEnviar()" data-original-title="Crear transferencia" id="crearTranferenciaBatch">
+            <a class="btn btn-sm btn-icon btn-bg-light btn-text-primary btn-hover-primary">
+                <i class="la la-th-list icon-xl"></i>
+            </a>
+        </li>
+    }
+
+    <li class="nav-item mb-2" data-toggle="tooltip" title="" data-placement="right" data-original-title="Volver">
+        <a onclick="Volver()" class="btn btn-sm btn-icon btn-bg-light btn-text-primary btn-hover-primary">
+            <i class="las la-arrow-left icon-xl"></i>
+        </a>
+    </li>
+</ul>
+
+<script>
+    const DURL = '@Url.Content("~/Data")'
+    const RURL = '@Url.Content("~/AprobacionPago")'
+    const XURL = '@Url.Content("~/Recepcion")'
+    const PAGOS_PROYECTADOS = '@Session["PAGOS_PROYECTADOS"].ToString()' === '1'
+</script>
+@Scripts.Render("~/Scripts/AprobacionPago/Index.js")

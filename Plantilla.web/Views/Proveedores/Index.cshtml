@@ -1,0 +1,220 @@
+﻿
+@{
+    ViewBag.Title = "Transferencias H2H - Pago de proveedores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex flex-column-fluid">
+    <div class="container container-fluid col-md-12">
+        <div class="card card-custom">
+            <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                <div class="card-title">
+                    <h3 class="card-label">
+                        @ViewBag.Title
+                    </h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <!--begin: Search Form-->
+                <!--begin::Search Form-->
+                <div class="mb-7">
+                    <div class="row align-items-center">
+                        <div class="col-lg-12 col-xl-12">
+                            <div class="row align-items-center">
+                                <div class="col-md-3  mt-4">
+                                    <form id="RangoFecha">
+                                        <label for="">Buscar por rango de fecha</label>
+                                        <div class="input-daterange input-group" id="kt_datepicker">
+                                            <input type="text" class="form-control filtro" id="FechaInicio" name="start" autocomplete="off" value="@DateTime.Now.AddDays(-7).ToString("dd/MM/yyyy")" data-date-format="dd/MM/yyyy" onchange="Buscar()" />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="la la-ellipsis-h"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control filtro" id="FechaFin" name="end" autocomplete="off" value="@DateTime.Now.ToString("dd/MM/yyyy")" data-date-format="dd/MM/yyyy" onchange="Buscar()" />
+                                        </div>
+                                    </form>
+                                </div>
+                                @*<div class="col-md-2">
+                                        <label>Estado</label>
+                                        <select id="estado" class="form-control" style="width:100%" onchange="Buscar()">
+                                            <option></option>
+                                            <option value="0" selected>Todos</option>
+                                            <option value="Pendiente">Pendiente</option>
+                                            <option value="Aprobado">Aprobado</option>
+                                            <option value="Enviado">Enviado</option>
+                                            <option value="Con errores">Con errores</option>
+                                            <option value="Rechazado">Rechazado</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Aprobador administrativo</label>
+                                        <select id="aprobador" class="form-control" style="width:100%" onchange="Buscar()">
+                                            <option value="0" selected>Todos</option>
+                                            @if (ViewBag.ObtenerAprobadores != null)
+                                            {
+                                                foreach (var item in ViewBag.ObtenerAprobadores)
+                                                {
+                                                    <option value="@item.USUARIO">@item.DESCRIPCION</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Usuario envió banco</label>
+                                        <select id="envia" class="form-control" style="width:100%" onchange="Buscar()">
+                                            <option value="0" selected>Todos</option>
+                                            @if (ViewBag.ObtenerEnviadores != null)
+                                            {
+                                                foreach (var item in ViewBag.ObtenerEnviadores)
+                                                {
+                                                    <option value="@item.USUARIO">@item.DESCRIPCION</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>*@
+                                <div class="col-md-3">
+                                    <label>Cuenta origen</label>
+                                    <select id="cuenta" class="form-control" style="width:100%" onchange="Buscar()">
+                                        <option value="0" selected>Todos</option>
+                                        @if (ViewBag.ObtenerCuentasBancos != null)
+                                        {
+                                            foreach (var item in ViewBag.ObtenerCuentasBancos)
+                                            {
+                                                <option value="@item.CUENTA_BANCO">@item.DESCRIPCION</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Proveedor</label>
+                                    <select id="proveedor" class="form-control" style="width:100%" onchange="Buscar()">
+                                        <option value="0" selected>Todos</option>
+                                        @if (ViewBag.ObtenerProveedores != null)
+                                        {
+                                            foreach (var item in ViewBag.ObtenerProveedores)
+                                            {
+                                                <option value="@item.PROVEEDOR">@item.PROVEEDOR - @item.NOMBRE</option>
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                                @*<div class="col-md-2 my-2 my-md-0  mt-4">
+                                        <label>Sitio de resguardo</label>
+                                        <select id="departamento" class="form-control" style="width:100%">
+                                            <option></option>
+                                            <option value="0">Todas</option>
+                                            <option value="LEHMAN ALAJUELA">LEHMAN ALAJUELA</option>
+                                            <option value="LEHMAN CARTAGO">LEHMAN CARTAGO</option>
+                                            <option value="LEHMAN SAN JOSE">LEHMAN SAN JOSE</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Ubicación</label>
+                                        <select id="ubicacion" class="form-control" style="width:100%">
+                                            <option></option>
+                                            <option value="0">Todas</option>
+                                            <option value="E2">E2</option>
+                                            <option value="C5">C5</option>
+                                            <option value="Seccion A">Seccion A</option>
+                                        </select>
+                                    </div>*@
+                                @*<div class="col-md-2">
+                                        <label>Remitente</label>
+                                        <select id="remitente" class="form-control" style="width:100%">
+                                            <option></option>
+                                            <option value="0">Todas</option>
+                                            <option value="Cachibaches Panama">Cachibaches Panama</option>
+                                            <option value="Cachibaches Guatemala">Cachibaches Guatemala</option>
+                                            <option value="Cachibaches Venezuela">Cachibaches Venezuela</option>
+                                        </select>
+                                    </div>*@
+
+
+
+
+                                <div class="col-md-3 my-2 my-md-0  mt-4">
+                                    <label>Búsqueda</label>
+                                    <div class="input-icon">
+                                        <input type="text" class="form-control" placeholder="Buscar..." id="kt_datatable_search_query" onchange="Buscar()" />
+                                        <span>
+                                            <i class="flaticon2-search-1 text-muted"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Search Form-->
+                <!--end: Search Form-->
+                <!--begin: Datatable-->
+                <div class="kt-portlet__body kt-portlet__body--fit">
+                    <!--begin: Datatable -->
+                    <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
+                    <!--end: Datatable -->
+                </div>
+                <!--end: Datatable-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal-->
+@*<div class="modal fade" id="responsablemodal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Cambiar responsable</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="col-md-12">
+                        <label>Responsable</label>
+                        <select id="responsablecambiar" class="form-control" style="width:100%">
+                            <option></option>
+                            <option value="MELCHOR">MELCHOR</option>
+                            <option value="BALTAZAR">BALTAZAR</option>
+                            <option value="CARMEN">CARMEN</option>
+                            <option value="BALTAZAR">BALTAZAR</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary font-weight-bold" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="deleteButton" onclick="guardarRes(this.value);" class="btn btn-success font-weight-bold" value="Default">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+
+
+
+<!-- begin::Sticky Toolbar -->
+<ul class="sticky-toolbar nav flex-column pl-2 pr-2 pt-3 pb-3 mt-4">
+    <li class="nav-item mb-2" data-toggle="tooltip" title="" data-placement="right" data-original-title="Volver">
+        <a onclick="Volver()" class="btn btn-sm btn-icon btn-bg-light btn-text-primary btn-hover-primary">
+            <i class="las la-arrow-left icon-xl"></i>
+        </a>
+    </li>
+
+</ul>
+<!-- end::Sticky Toolbar -->
+
+<script>
+   const URL_FILE = '@Url.Content("~/Files")'
+</script>
+
+<script>
+    const eurl = '@Url.Content("~/Proveedores")'
+    const PAGO_PROVEEDORES = '@Session["PAGO_PROVEEDORES"].ToString()' === '1'
+</script>
+@Scripts.Render("~/Scripts/Proveedores/Index.js")

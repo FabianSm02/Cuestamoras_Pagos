@@ -1,0 +1,419 @@
+﻿@{
+    Layout = null;
+}
+
+<html lang="es">
+<!--begin::Head-->
+<head>
+    <base href="../../../">
+    <meta charset="utf-8" />
+    <title>Cuestamoras H2H | Login</title>
+    <meta name="description" content="Login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!--begin::Fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <!--end::Fonts-->
+    <!--begin::Page Custom Styles(used by this page)-->
+    <link href="~/assets/css/pages/users/login-3.css" rel="stylesheet" type="text/css" />
+    <!--end::Page Custom Styles-->
+    <!--begin::Global Theme Styles(used by all pages)-->
+    <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/Styles/App.css" rel="stylesheet" type="text/css" />
+    <!--end::Global Theme Styles-->
+    <!--begin::Layout Themes(used by all pages)-->
+    <link href="~/assets/css/themes/layout/header/base/light.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/themes/layout/header/menu/light.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" />
+    <!--end::Layout Themes-->
+    <link rel="shortcut icon" href="~/img/Cliente/logopequeno.png" />
+    <script>
+        // url del controlador
+        const _KClientID = '@System.Configuration.ConfigurationManager.AppSettings["ClientId"].ToString()'
+        const _KTenantID = '@System.Configuration.ConfigurationManager.AppSettings["Tenant"].ToString()'
+        const _KUrlMaster = '@System.Configuration.ConfigurationManager.AppSettings["UriMaster"].ToString()'
+    </script>
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+    <!--begin::Main-->
+    <div class="d-flex flex-column flex-root">
+        <!--begin::Login-->
+        <div class="login login-signin-on login-3 d-flex flex-row-fluid" id="kt_login">
+            <div class="d-flex flex-center flex-row-fluid bgi-size-cover bgi-position-top bgi-no-repeat" style="background-image: url(@Url.Content("~/img/Cliente/loginCuestamoras.jpg"));">
+                <div class="login-form text-center p-7 position-relative overflow-hidden">
+                    <!--begin::Login Header-->
+                    <div class="d-flex flex-center mb-15">
+                        <a href="@Url.Action("Index", "Login")">
+                            <img src="~/img/Cliente/cuestalogo.png" alt="" width="300" />
+                        </a>
+                    </div>
+                    <!--end::Login Header-->
+                    <!--begin::Login Sign in form-->
+
+                    @if (@System.Configuration.ConfigurationManager.AppSettings["LOFFICE"].ToString() == "S")
+                    {
+                        <div class="login-signin" id="login-signin">
+                            <div class="mb-20">
+                                <h3 style="color:white !important">Iniciar sesión</h3>
+                                <div style="color:white !important" class="text-muted font-weight-bold">Ingrese sus credenciales para ingresar al sistema</div>
+                            </div>
+                            <form id="login-form" class="form">
+                                <div class="form-group mb-5">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text"><i class="las la-user-alt icon-xl"></i></span></div>
+                                        <input value="" class="form-control form-control-solid py-4 px-8" type="text" placeholder="Usuario" id="username" name="username" readonly disabled autocomplete="off" />
+                                    </div>
+                                </div>
+                                <div class="form-group mb-5">
+                                    <select id="CIA" name="cia" class="form-control form-control-solid py-4 px-8">
+                                        <option value="0">SIN COMPAÑÍA</option>
+                                        @*<option value="URBANISMO" selected>URBANISMO</option>*@
+                                        @if (ViewBag.CIAS != null)
+                                        {
+                                            foreach (var item in ViewBag.CIAS)
+                                            {
+                                                <option value="@item.CONJUNTO">@item.CONJUNTO</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <button onclick="loginOffice()" style="background-color:black !important; color:white" class="btn  font-weight-bold px-9 py-4 my-3 mx-4">
+                                    <strong>Ingresar</strong>
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="login-signin" id="login-signinNoADA">
+                            <div class="mb-20">
+                                <h3 style="color:#808080 !important">Iniciar sesión</h3>
+                                <div style="color:black !important" class="text-muted font-weight-bold">Ingrese sus credenciales para ingresar al sistema</div>
+                            </div>
+                            <form id="login-form" class="form">
+                                <div class="form-group mb-5">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text"><i class="las la-user-alt icon-xl"></i></span></div>
+                                        <input class="form-control form-control-solid py-4 px-8" type="text" placeholder="Usuario" name="usuarioNoADA" autocomplete="off" @*onchange="buscaCIAS()" onfocus="buscaCIAS()"*@ />
+                                    </div>
+                                </div>
+                                <div class="form-group mb-5">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend"><span class="input-group-text"><i class="las la-key icon-xl"></i></span></div>
+                                        <input class="form-control form-control-solid py-4 px-8" type="password" placeholder="Contraseña" name="passwordNoADA" />
+                                    </div>
+                                </div>
+                                <div class="form-group mb-5">
+                                    <select id="CIANoADA" name="esquemaNoADA" class="form-control form-control-solid py-4 px-8">
+                                        <option value=""></option>
+                                        <option value="URBANISMO" selected>URBANISMO</option>
+                                        <option value="INNOVA" selected>INNOVA</option>
+                                        @if (ViewBag.CIAS != null)
+                                        {
+                                            foreach (var item in ViewBag.CIAS)
+                                            {
+                                                <option value="@item.CONJUNTO">@item.CONJUNTO</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group mb-5">
+                                    <label class="checkbox ml-2" style="color:white !important">
+                                        <input type="checkbox" name="Checkboxes2" class="mr-4" />
+                                        <span></span>
+                                        <div style="color:black">Recordarme</div>
+                                    </label>
+                                    @*<label class="checkbox m-0" style="color:white !important">
+                                            <input type="checkbox" name="remember" />Recordarme
+                                            <span></span>
+                                        </label>*@
+
+                                </div>
+                                <button id="kt_login_signin_submit" style="background-color:black !important; color:white" class="btn  font-weight-bold px-9 py-4 my-3 mx-4">
+                                    <strong>Ingresar</strong>
+                                </button>
+                            </form>
+
+                            @*<div class="mb-10" style="color:white !important">
+                                    <a href="javascript:;" id="kt_login_signup" onclick="registrar()" style="color:black !important; margin-right:10px" class="text-muted text-hover-primary font-weight-bold">Registrarse</a>
+                                    <a href="javascript:;" id="kt_login_forgot" onclick="forgot()" class="text-muted text-hover-primary" style="color:black !important">¿Olvidó la contraseña?</a>
+                                </div>*@
+
+                        </div>
+                    }
+                    <!--end::Login Sign in form-->
+                    <!--begin::Login Sign up form-->
+                    <div id="login-signup" class="login-signup" style="display:none">
+                        <div class="mb-5">
+                            <h3 style="color: #808080 !important">Registrarme</h3>
+                            <div style="color: black !important" class="text-muted font-weight-bold">Ingresa tus datos para registrarte</div>
+                        </div>
+                        <div class="form" id="" autocomplete="off">
+                            <div class="register-form">
+                                <div class="form-group mb-5">
+                                    <input class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="Usuario" name="username" />
+                                </div>
+
+                                <div class="form-group mb-5">
+                                    <input class="form-control h-auto form-control-solid py-4 px-8" type="text" placeholder="Correo" name="email" />
+                                </div>
+                                @*<div class="form-group mb-5">
+                                        <input class="form-control h-auto form-control-solid py-4 px-8" type="date" placeholder="Fecha de nacimiento" name="birth" />
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <input class="form-control h-auto form-control-solid py-4 px-8" type="tel" placeholder="Telefono" name="phone" />
+                                    </div>*@
+                                <div class="form-group mb-5">
+                                    <input class="form-control h-auto form-control-solid py-4 px-8 password" type="password" id="password" placeholder="Contraseña" name="password" />
+                                    <div class="invalid-feedback">
+                                        The password must have beetwen 8 and 15 characters, capital letters and numbers
+                                    </div>
+                                </div>
+                                <div class="form-group mb-5">
+                                    <input class="form-control h-auto form-control-solid py-4 px-8" type="password" id="rpasssword" placeholder="Confirmar contraseña" name="rpassword" />
+                                    <div class="invalid-feedback">
+                                        Passwords doesn't match
+                                    </div>
+                                </div>
+                                <div class="form-group mb-5 text-left">
+                                    <label class="checkbox m-0" style="color:black !important">
+                                        <input type="checkbox" name="agree" style="margin-right:2px; color:black !important" />Aceptar
+                                        <a href="#" class="font-weight-bold ml-2" style="color:black !important"> términos y condiciones</a>.
+                                        <span></span>
+                                    </label>
+                                    <div class="form-text text-muted text-center"></div>
+                                </div>
+                                <div class="form-group d-flex flex-wrap flex-center mt-10">
+                                    <button id="kt_login_signup_submit" style="background-color:black !important; color:white" onclick="reg()" class="btn  font-weight-bold px-9 py-4 my-3 mx-2">Registrarse</button>
+                                    <button id="kt_login_signup_cancel" onclick=" window.location.reload();" class="btn btn-secondary font-weight-bold px-9 py-4 my-3 mx-2">Cancelar</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="register-confirm" id="register-confirm" style="display:none">
+                        <div class="mb-5">
+                            <h3 style="color: white !important ">Recuperar contraseña</h3>
+                            <div style="color: white !important " class="text-muted font-weight-bold">Ingrese su correo para reiniciar su contraseña:</div>
+                        </div>
+                        <div class="form-group mb-5">
+                            <input class="form-control h-auto form-control-solid py-4 px-8" type="email" placeholder="correo" name="code" />
+                        </div>
+                        <div class="form-group d-flex flex-wrap flex-center mt-10">
+                            <button id="kt_login_signup_validate" style="background-color:black !important; color:white" class="btn font-weight-bold px-9 py-4 my-3 mx-2" onclick="send()">Enviar</button>
+                            <button id="kt_login_signup_validate_resend" class="btn btn-secondary font-weight-bold px-9 py-4 my-3 mx-2" onclick=" window.location.reload();">Cancelar</button>
+                        </div>
+                    </div>
+                    <!--end::Login Sign up form-->
+                    @*<div class="d-flex flex-center mb-15 mt-8">
+                            <a href="@Url.Action("Index", "Login")">
+                                <img src="~/img/Cliente/bpo.png" class="max-h-150px" alt="" />
+                            </a>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+        <!--end::Login-->
+    </div>
+
+    <!--end::Main-->
+    <!--begin::Global Config(global config for global JS scripts)-->
+    <script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1200 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#6993FF", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#8950FC", "warning": "#FFA800", "danger": "#F64E60", "light": "#F3F6F9", "dark": "#212121" }, "light": { "white": "#ffffff", "primary": "#E1E9FF", "secondary": "#ECF0F3", "success": "#C9F7F5", "info": "#EEE5FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#212121", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#ECF0F3", "gray-300": "#E5EAEE", "gray-400": "#D6D6E0", "gray-500": "#B5B5C3", "gray-600": "#80808F", "gray-700": "#464E5F", "gray-800": "#1B283F", "gray-900": "#212121" } }, "font-family": "Poppins" };</script>
+    <!--end::Global Config-->
+    <!--begin::Global Theme Bundle(used by all pages)-->
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    <!--end::Global Theme Bundle-->
+    <!--begin::Page Scripts(used by this page)-->
+    <script>
+        let _user
+        let authContext
+        let isCallback
+        let Logueado
+        // Get UI jQuery Objects
+        var $panel = $(".panel-body");
+        var $userDisplay = $(".app-user");
+        var $signInButton = $(".app-login");
+        var $signOutButton = $(".app-logout");
+        var $errorMessage = $(".app-error");
+
+        // Enter Global Config Values & Instantiate ADAL AuthenticationContext
+        window.config = {
+            instance: 'https://login.microsoftonline.com/',
+            tenant: _KTenantID,
+            clientId: _KClientID,
+            postLogoutRedirectUri: window.location.origin,
+            cacheLocation: 'localStorage' // enable this for IE, as sessionStorage does not work for localhost.
+        };
+        const toastrOptions = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "2000",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        // url del controlador
+        const RURL = '@Url.Content("~/Login")/'
+    </script>
+
+    @Scripts.Render("~/ADA/adal.js")
+    @if (@System.Configuration.ConfigurationManager.AppSettings["LOFFICE"].ToString() == "S")
+    {
+<script>
+
+    function getAllUrlParams(url) {
+        // get query string from url (optional) or window
+        var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+        // we'll store the parameters here
+        var obj = {};
+        // if query string exists
+        if (queryString) {
+            // stuff after # is not part of query string, so get rid of it
+            queryString = queryString.split('#')[0];
+            // split our query string into its component parts
+            var arr = queryString.split('&');
+
+            for (var i = 0; i < arr.length; i++) {
+                // separate the keys and the values
+                var a = arr[i].split('=');
+
+                // set parameter name and value (use 'true' if empty)
+                var paramName = a[0];
+                var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
+
+                // (optional) keep case consistent
+                paramName = paramName.toLowerCase();
+                if (typeof paramValue === 'string') paramValue = paramValue.toLowerCase();
+
+                // if the paramName ends with square brackets, e.g. colors[] or colors[2]
+                if (paramName.match(/\[(\d+)?\]$/)) {
+
+                    // create key if it doesn't exist
+                    var key = paramName.replace(/\[(\d+)?\]/, '');
+                    if (!obj[key]) obj[key] = [];
+
+                    // if it's an indexed array e.g. colors[2]
+                    if (paramName.match(/\[\d+\]$/)) {
+                        // get the index value and add the entry at the appropriate position
+                        var index = /\[(\d+)\]/.exec(paramName)[1];
+                        obj[key][index] = paramValue;
+                    } else {
+                        // otherwise add the value to the end of the array
+                        obj[key].push(paramValue);
+                    }
+                } else {
+                    // we're dealing with a string
+                    if (!obj[paramName]) {
+                        // if it doesn't exist, create property
+                        obj[paramName] = paramValue;
+                    } else if (obj[paramName] && typeof obj[paramName] === 'string') {
+                        // if property does exist and it's a string, convert it to an array
+                        obj[paramName] = [obj[paramName]];
+                        obj[paramName].push(paramValue);
+                    } else {
+                        // otherwise add the property
+                        obj[paramName].push(paramValue);
+                    }
+                }
+            }
+        }
+        return obj;
+    }
+    if (getAllUrlParams().cia == "0")
+        toastr.warning("Se ocupa una compañia", 'Alerta', toastrOptions)
+
+    $(document).ready(() => {
+        $('#CIA').select2({
+            placeholder: "Seleccione una compañía",
+        })
+    })
+    function loginOffice() {
+        let estado = true;
+        let usu = $("#username").val();
+        let cia = $("#CIA").val();
+        if (usu == "" || usu == undefined) {
+            toastr.warning("Se ocupa un usuario", 'Alerta', toastrOptions)
+            return false;
+        }
+        if (cia == "0") {
+            toastr.warning("Se ocupa una compañia", 'Alerta', toastrOptions)
+            return false;
+        }
+        $.ajax({
+            url: `${RURL}IndexADA`,
+            data: {
+                UsuarioExterno: usu,
+                cia: cia
+            },
+            async: true,
+            type: "POST",
+            success: function (data) {
+                if (data === 1) {
+                    toastr.success('Acceso exitoso', 'Bienvenido', toastrOptions)
+                    setTimeout(() => {
+                        window.location.href = _urlLogin
+                    }, 1500)
+                } else if (data === 2) {
+                    toastr.warning('Usuario o contraseña inválido', 'Alerta', toastrOptions)
+                    btn.removeClass('spinner spinner-right pr-12 spinner-sm spinner-white').attr('disabled', false)
+                } else if (data === 3) {
+                    toastr.warning('El usuario no tiene permisos en esta compañía', 'Alerta', toastrOptions)
+                    btn.removeClass('spinner spinner-right pr-12 spinner-sm spinner-white').attr('disabled', false)
+                } else if (data === 4) {
+                    toastr.warning('El usuario no tiene permisos para ingresar al sistema', 'Alerta', toastrOptions)
+                    btn.removeClass('spinner spinner-right pr-12 spinner-sm spinner-white').attr('disabled', false)
+                }
+            },
+            error: function (jqXHR, exception) {
+                var error = "";
+                if (jqXHR.status === 0) {
+                    error = 'No conectado.\nVerifique su conexión de red.';
+                } else if (jqXHR.status == 404) {
+                    error = 'La página solicitada no fue encontrada. [404]';
+                } else if (jqXHR.status == 500) {
+                    error = 'Error interno del servidor [500].';
+                } else if (exception === 'parsererror') {
+                    error = 'Fallo la conversión a JSON.';
+                } else if (exception === 'timeout') {
+                    error = 'Error de tiempo de espera.';
+                } else if (exception === 'abort') {
+                    error = 'Solicitud Ajax abortada.';
+                } else {
+                    error = 'Error no detectado.\n' + jqXHR.responseText;
+                }
+                toastr.error(error, "¡Error!");
+            }
+        });
+    }
+</script>
+@Scripts.Render("~/ADA/appADA.js")
+@Scripts.Render("~/ADA/CTRL/todoListCtrl.js")
+@*@Scripts.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/bundles/LoginOffice", true))*@
+}
+else
+{
+@Scripts.Render("~/Scripts/Login/Index.js")
+@Scripts.Render("~/ADA/app.js")
+@Scripts.Render("~/ADA/CTRL/todoListCtrl.js")
+@*@Scripts.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/bundles/Login", true))*@
+}
+
+    <!--end::Page Scripts-->
+</body>
+<!--end::Body-->
+</html>

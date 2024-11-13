@@ -1,0 +1,2 @@
+TEF,CR,3-101-505094,CR89012300123456123456,F,Marlon Alvarez Azofeif,Alvarez,Azofeifa,01-1084-0320,S,CR27010200009351012466,SAN JOSE,,,CR,,,,,,100001,07-21-2021,CRC,1050,PRUEBAS CR 1,,,,marlon.alvarez@scotiabank.com,,,,,,,,,,,DS_1,Transacción ingresada exitosamente.,
+LOC,CR,3-101-505094,CR89012300123456123456,F,Alban Garro Scotiaban,Garro,Scotia,01-0929-0663,S,CR60012300919202836375,CR,,,CR,,,,,,100002,08-03-2021,CRC,1051,PRUEBAS CR 2,,,,marlon.alvarez@scotiabank.com,,,,,,,,,,,DS_2,Transaccion con fecha futura en espera de ser procesada ,

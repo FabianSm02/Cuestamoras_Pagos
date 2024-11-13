@@ -1,0 +1,387 @@
+﻿
+@{
+    ViewBag.Title = "Administración de cuentas SFTP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Subheader-->
+    <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+            <!--begin::Info-->
+            <div class="d-flex align-items-center flex-wrap mr-1">
+                <!--begin::Page Heading-->
+                <div class="d-flex align-items-baseline mr-5">
+                    <!--begin::Page Title-->
+                    <h5 class="text-dark font-weight-bold my-2 mr-5">Administración de cuentas SFTP</h5>
+                    <!--end::Page Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Content("~/Cuentas")" class="text-muted">Inicio</a>
+                        </li>
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page Heading-->
+            </div>
+            <!--end::Info-->
+        </div>
+    </div>
+    <!--end::Subheader-->
+    <!--begin::Entry-->
+    <div class="d-flex flex-column-fluid">
+        <!--begin::Container-->
+        <div class="container-fluid m-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--begin::Card-->
+                    <div class="card card-custom">
+                        <!--begin::Card header-->
+                        <div class="card-header card-header-tabs-line nav-tabs-line-3x">
+                            <!--begin::Toolbar-->
+                            <div class="card-toolbar">
+                                <ul class="nav nav-tabs nav-bold nav-tabs-line nav-tabs-line-3x">
+                                    <!--begin::Item-->
+                                    <!--<li class="nav-item mr-3">
+                                        <a id="1-tab" class="nav-link active" data-toggle="tab" onclick="SeleccionarTab(1)" href="#kt_user_tab_1">
+                                            <span class="nav-icon">
+                                                <span class="svg-icon">-->
+                                    <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/General/User.svg-->
+                                    <!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                                            <path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                            <path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" fill="#000000" fill-rule="nonzero"></path>
+                                        </g>
+                                    </svg>-->
+                                    <!--end::Svg Icon-->
+                                    <!--</span>
+                                            </span>
+                                            <span class="nav-text font-size-lg">Usuarios</span>
+                                        </a>
+                                    </li>-->
+                                    <!--end::Item-->
+                                    <!--begin::Item-->
+                                    <!--<li class="nav-item">
+                                        <a id="2-tab" class="nav-link" data-toggle="tab" onclick="SeleccionarTab(2)" href="#kt_user_tab_2">
+                                            <span class="nav-icon">
+                                                <span class="svg-icon">-->
+                                    <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Communication/Mail-opened.svg-->
+                                    <!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <path d="M4,4 L11.6314229,2.5691082 C11.8750185,2.52343403 12.1249815,2.52343403 12.3685771,2.5691082 L20,4 L20,13.2830094 C20,16.2173861 18.4883464,18.9447835 16,20.5 L12.5299989,22.6687507 C12.2057287,22.8714196 11.7942713,22.8714196 11.4700011,22.6687507 L8,20.5 C5.51165358,18.9447835 4,16.2173861 4,13.2830094 L4,4 Z" fill="#000000" opacity="0.3" />
+                                            <path d="M12,11 C10.8954305,11 10,10.1045695 10,9 C10,7.8954305 10.8954305,7 12,7 C13.1045695,7 14,7.8954305 14,9 C14,10.1045695 13.1045695,11 12,11 Z" fill="#000000" opacity="0.3" />
+                                            <path d="M7.00036205,16.4995035 C7.21569918,13.5165724 9.36772908,12 11.9907452,12 C14.6506758,12 16.8360465,13.4332455 16.9988413,16.5 C17.0053266,16.6221713 16.9988413,17 16.5815,17 C14.5228466,17 11.463736,17 7.4041679,17 C7.26484009,17 6.98863236,16.6619875 7.00036205,16.4995035 Z" fill="#000000" opacity="0.3" />
+                                        </g>
+                                    </svg>-->
+                                    <!--end::Svg Icon-->
+                                    <!--</span>
+                                            </span>
+                                            <span class="nav-text font-size-lg">Roles</span>
+                                        </a>
+                                    </li>-->
+                                    <!--end::Item-->
+                                    <!--begin::Item-->
+                                    <!--<li class="nav-item">
+                                        <a id="3-tab" class="nav-link" data-toggle="tab" onclick="SeleccionarTab(3)" href="#kt_user_tab_3">
+                                            <span class="nav-icon">
+                                                <span class="svg-icon">-->
+                                    <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Communication/Mail-opened.svg-->
+                                    <!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5" />
+                                            <path d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z" fill="#000000" opacity="0.3" />
+                                        </g>
+                                    </svg>-->
+                                    <!--end::Svg Icon-->
+                                    <!--</span>
+                                            </span>
+                                            <span class="nav-text font-size-lg">Permisos</span>
+                                        </a>
+                                    </li>-->
+                                    <!--begin::Item-->
+                                    <li class="nav-item">
+                                        <a id="3-tab" class="nav-link active" data-toggle="tab" onclick="SeleccionarTab(4)" href="#kt_user_tab_4">
+                                            <span class="nav-icon">
+                                                <span class="svg-icon">
+                                                    <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Communication/Mail-opened.svg-->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24" height="24" />
+                                                            <rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5" />
+                                                            <path d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z" fill="#000000" opacity="0.3" />
+                                                        </g>
+                                                    </svg>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                            </span>
+                                            <span class="nav-text font-size-lg">SFTP y cuentas</span>
+                                        </a>
+                                    </li>
+                                    <!--end::Item-->
+                                </ul>
+                            </div>
+                            <!--end::Toolbar-->
+                        </div>
+                        <!--end::Card header-->
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <!--begin::Tab-->
+                                <div class="tab-pane" id="kt_user_tab_1" role="tabpanel">
+                                    <!--begin::Search Form-->
+                                    <div class="mb-7">
+                                        <div class="row d-flex align-items-center">
+                                            <!--<div class="col-md-3">
+                                                <label for="FiltroRol">Rol</label>
+                                                <select name="ROL" style="width: 100%" id="FiltroRol" class="form-control rol-usuario">
+                                                    <option value="0" selected>Todos</option>-->
+                                            @*@if (ViewBag.Roles != null)
+                                                {
+                                                    foreach (var item in ViewBag.Roles)
+                                                    {
+                                                        <option value="@item.ROL">@item.DESCRIPCION</option>
+                                                    }
+                                                }*@
+                                            <!--</select>
+                                            </div>-->
+                                            <!--<div class="col-md-3">
+                                            <label for="FiltroDepartamento">Equipo</label>
+                                            <select name="DEPARTAMENTO" style="width: 100%" id="FiltroDepartamento" class="form-control">
+                                                <option></option>
+                                                <option value="0">Todos</option>
+                                                <option value="EQUIPO-001">EQUIPO-001</option>
+                                                <option value="E1UIPO-002">EQUIPO-002</option>-->
+                                            @*@if (ViewBag.Departamentos != null)
+                                                {
+                                                    foreach (var item in ViewBag.Departamentos)
+                                                    {
+                                                        <option value="@item.DEPARTAMENTO">@item.DESCRIPCION</option>
+                                                    }
+                                                }*@
+                                            <!--</select>
+                                            </div>-->
+                                            <!--<div class="col-md-3">
+                                            <label for="FiltroJefe">Jefe</label>
+                                            <select name="JEFE" style="width: 100%" id="FiltroJefe" class="form-control jefe">
+                                                <option></option>
+                                                <option value="0">Todos</option>
+                                                <option value="EMP-0021">EMP-0021 Alejandro Álvarez</option>-->
+                                            @*@if (ViewBag.Jefes != null)
+                                                {
+                                                    foreach (var item in ViewBag.Jefes)
+                                                    {
+                                                        <option value="@item.EMPLEADO">@item.DESCRIPCION</option>
+                                                    }
+                                                }*@
+                                            <!--</select>
+                                            </div>-->
+                                            <div class=" col-md-2 mt-8 pt-5">
+                                                <div class="form-group row">
+                                                    <div class="col-12">
+                                                        <div class="input-icon">
+                                                            <input type="text" class="form-control" placeholder="Buscar..." id="kt_datatable_search_query" autocomplete="off" />
+                                                            <span>
+                                                                <i class="flaticon2-search-1 text-muted"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end::Search Form-->
+                                    <!--begin: Datatable-->
+                                    <div class="kt-portlet__body kt-portlet__body--fit">
+                                        <!--begin: Datatable -->
+                                        <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_usuarios" onclick="BuscarRoles()"></div>
+                                        <!--end: Datatable -->
+                                    </div>
+                                    <!--end: Datatable-->
+                                </div>
+                                <div class="tab-pane pane-permisos px-7" id="kt_user_tab_2" role="tabpanel" onclick="BuscarRoles()">
+                                    <!--begin: Datatable-->
+                                    <div class="kt-portlet__body kt-portlet__body--fit">
+                                        <!--begin: Datatable -->
+                                        <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_roles"></div>
+                                        <!--end: Datatable -->
+                                    </div>
+                                    <!--end: Datatable-->
+                                </div>
+                                <div class="tab-pane pane-permisos px-7" id="kt_user_tab_3" role="tabpanel">
+                                    <!--begin: Datatable-->
+                                    <div class="kt-portlet__body kt-portlet__body--fit">
+                                        <!--begin: Datatable -->
+                                        <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_permisos"></div>
+                                        <!--end: Datatable -->
+                                    </div>
+                                    <!--end: Datatable-->
+                                </div>
+                                <div class="tab-pane show active" id="kt_user_tab_4" role="tabpanel">
+                                    <!--begin: Datatable-->
+                                    <div class="kt-portlet__body kt-portlet__body--fit">
+                                        <!--begin: Datatable -->
+                                        <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_cuentas"></div>
+                                        <!--end: Datatable -->
+                                    </div>
+
+                                    <!--end: Datatable-->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--end::Card-->
+                </div>
+            </div>
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Entry-->
+</div>
+
+<!-- Modal-->
+<div class="modal fade" id="modalsftp" tabindex="-1" role="dialog" aria-labelledby="modalsftpLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="modalsftpLabel">Crear cuenta sftp</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="card-body m-0">
+                    <div id="">
+                        <div class="form-group col-md-12" id="divID">
+                            <label for="Usuario">ID</label>
+                            <input disabled type="text" class="form-control" name="ID" placeholder="Ingrese el ID" id="h2hID" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="Usuario">Banco del H2H</label>
+                            <select name="Empleado" style="width: 100%" id="nocuenbta" class="form-control" disabled>
+                                <option value=""></option>
+                                <option value="Kyriba">Kyriba</option>
+                                <option value="BCR">BCR</option>
+                                <option value="Scotiabank">Scotiabank</option>
+                                <option value="BNCR">BNCR</option>
+                                <option value="BCT">BCT</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="Usuario">Plan</label>
+                            <input type="text" class="form-control plan" name="plan" placeholder="Ingrese el plan" id="plan" />
+                        </div>
+                        <div class="form-group col-md-12" id="divEnvio">
+                            <label for="Usuario">Envio</label>
+                            <input disabled type="text" class="form-control" name="envio" placeholder="Ingrese el envio" id="envio" />
+                        </div>
+                        <div class="form-group col-md-12" id="divmoneda">
+                            <label for="Empleado">Moneda</label>
+                            <select name="Empleado" style="width: 100%" id="moneda" class="form-control">
+                                <option value=""></option>
+                                <option value="CRC">CRC - Colones</option>
+                                <option value="DOL">DOL - Dólares</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-12" id="divip">
+                            <label for="Usuario">Dirección IP</label>
+                            <input type="text" class="form-control ip_address" name="Descripcion" placeholder="Ingrese la dirección IP" id="dirip"/>
+                        </div>
+                        <div class="form-group col-md-12" id="divpuerto">
+                            <label for="Usuario">Puerto</label>
+                            <input type="text" class="form-control puerto" name="Descripcion" placeholder="Ingrese el puerto" id="puerto"/>
+                        </div>
+                        <div class="form-group col-md-12" id="divusuario">
+                            <label for="Usuario">Usuario</label>
+                            <input type="text" class="form-control" name="Descripcion" placeholder="Ingrese el usuario" id="usu"/>
+                        </div>
+                        <div class="form-group col-md-12" id="divcontrasena">
+                            <label for="Usuario">Contraseña</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" name="Descripcion" placeholder="Ingrese la contraseña" id="contra"/>
+                                @*<a href="javascript:;" onclick="verContra()" class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="la la-eye" id="sicontra"></i>
+                        <i class="la la-eye-slash d-none" id="nocontra"></i>
+                    </span>
+                </a>*@
+                            </div>
+
+                        </div>
+                        <div class="form-group col-md-12" id="divreceptor">
+                            <label for="Usuario">Llave pública del receptor</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" name="Descripcion" placeholder="Ingrese la llave pública del receptor" id="llavrec" />
+                                @*<a href="javascript:;" onclick="verLlaveRec()" class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="la la-eye" id="sillaverec"></i>
+                        <i class="la la-eye-slash d-none" id="nollaverec"></i>
+                    </span>
+                </a>*@
+                            </div>
+
+                        </div>
+                        <div class="form-group col-md-12" id="divemisor">
+                            <label for="Usuario">Llave pública del emisor</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" name="Descripcion" placeholder="Ingrese la llave pública del emisor" id="llavemi" />
+                                @*<a href="javascript:;" onclick="verLlaveEmi()" class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="la la-eye" id="sillaveemi"></i>
+                        <i class="la la-eye-slash d-none" id="nollaveemi"></i>
+                    </span>
+                </a>*@
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="Empleado">Cuenta Softland</label>
+                            <select name="cuentaSoftland" style="width: 100%" id="cuentaSoftland" class="form-control">
+                                <option value=""></option>
+                                 @if (ViewBag.ObtenerCuentasSoftland != null)
+                                    {
+                                        foreach (var item in ViewBag.ObtenerCuentasSoftland)
+                                        {
+                                            <option value="@item.CUENTA_BANCO">@item.CUENTA_BANCO</option>
+                                        }
+                                    }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-insertar-cuenta" type="button" class="btn btn-primary font-weight-bold">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal-->
+<!-- begin::Sticky Toolbar -->
+<ul class="sticky-toolbar nav flex-column pl-2 pr-2 pt-3 pb-3 mt-4" id="botonesFlotantes">
+    @if (Session["CONFIG_SFTP"].ToString() == "1")
+    {
+        <li class="nav-item mb-2" id="nueva-cuenta" data-toggle="tooltip" data-placement="right" data-original-title="Nueva cuenta SFTP">
+            <a onclick="CrearCuenta()" class="btn btn-sm btn-icon btn-bg-light btn-text-primary btn-hover-primary">
+                <i class="las la-plus icon-xl"></i>
+            </a>
+        </li>
+    }
+    <li class="nav-item mb-2" data-toggle="tooltip" title="" data-placement="right" data-original-title="Volver">
+        <a onclick="Volver()" class="btn btn-sm btn-icon btn-bg-light btn-text-primary btn-hover-primary">
+            <i class="las la-arrow-left icon-xl"></i>
+        </a>
+    </li>
+
+</ul>
+<!-- end::Sticky Toolbar -->
+<script>
+    const rurl = '@Url.Content("~/Cuentas")'
+    const permiso = '1'
+    const CONFIG_SFTP = '@Session["CONFIG_SFTP"].ToString()' === '1'
+</script>
+@Scripts.Render("~/Scripts/Cuentas/Index.js")
